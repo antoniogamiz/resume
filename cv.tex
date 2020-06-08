@@ -1,147 +1,233 @@
-%!TEX TS-program = xelatex
-\documentclass[]{friggeri-cv}
-\usepackage{afterpage}
-\usepackage{hyperref}
-\usepackage{color}
-\usepackage{xcolor}
-\usepackage{smartdiagram}
+% !TEX TS-program = xelatex
+% !TEX encoding = UTF-8
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Resume template - https://github.com/lquesada/resume
+%% Check that URL for licensing information.
+%% 
+%% Copyright (c) 2019, Luis Quesada Torres -
+%% https://github.com/lquesada | www.luisquesada.com
+%%
+%% Heavily based on (and old version of) the SIMPLE-RESUME-CV
+%% by zachscrivena, which is unlicensed.
+%% <https://github.com/zachscrivena/simple-resume-cv>
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% INSTRUCTIONS FOR COMPILING THIS DOCUMENT ("resume.tex")
+%% TEX ---(XeLaTeX)---> PDF:
+%%
+%% Method 1: Use latexmk for fully automated document generation:
+%%   latexmk -xelatex "CV.tex"
+%%   (add the -pvc switch to automatically recompile on changes)
+%%
+%% Method 2: Use XeLaTeX directly:
+%%   xelatex "CV.tex"
+%%   (run multiple times to resolve cross-references if needed)
+%%
+%% PDF ---(pdf2htmlEX)> HTML:
+%%
+%% Install pdf2htmlEX from https://github.com/coolwanglu/pdf2htmlEX, then:
+%%   alias pdf2htmlEX='docker run -ti --rm -v `pwd`:/pdf bwits/pdf2htmlex pdf2htmlEX'
+%%   pdf2htmlEX --zoom 1.5 --process-outline 0 resume.pdf
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Note: Search "SIZEMARKER" to find settings you can tweak to
+%       make the page, the margins, or the text bigger or smaller.
+
+
+% SIZEMARKER: You may want to replace "letterpaper" with "a4paper", but when
+% exporting to html, letterpaper can be printed in both letter and A4 sheets
+% of paper.
+% SIZEMARKER: You may also want to tweak the font size.
+\documentclass[letterpaper,10pt,oneside]{article}
+
+% Long table for page layout.
+\usepackage{longtable}
+\usepackage{calc}
+
+% SIZEMARKER: Page margins
+\usepackage[
+left=0.37in,
+right=0.65in,
+top=0.85in,
+bottom=0.45in,
+nohead,
+includefoot]{geometry}
+
+% Hyphenation: Disabled.
+\usepackage[none]{hyphenat}
+
+% XeLaTeX packages.
 \usepackage{fontspec}
-% if you want to add fontawesome package
-% you need to compile the tex file with LuaLaTeX
-% References:
-%   http://texdoc.net/texmf-dist/doc/latex/fontawesome/fontawesome.pdf
-%   https://www.ctan.org/tex-archive/fonts/fontawesome?lang=en
-%\usepackage{fontawesome}
-\usepackage{metalogo}
-\usepackage{dtklogos}
-\usepackage[utf8]{inputenc}
+\defaultfontfeatures{Ligatures=TeX}
+\usepackage{xunicode}
+\usepackage{xltxtra}
+
+\renewcommand*{\familydefault}{\sfdefault}
+
+
+% PDF settings and properties.
+
+% Headers and footers: Blank header, page number in footer.
+% Commented: I don't want the page number in footer.
+\makeatletter
+\def\ps@plain{%
+\def\@oddhead{}%
+\def\@evenhead{}%
+\def\@oddfoot{}%
+\def\@evenfoot{}}
+%\def\@oddfoot{\footnotesize\hfill{Page}~{\thepage}~of~\pageref{LastPage}\hfill}%
+%\def\@evenfoot{\footnotesize\hfill{Page}~{\thepage}~of~\pageref{LastPage}\hfill}}
+\makeatother
+
+\pagestyle{plain}
+
+% Paragraph style: No indentation.
+\setlength{\parindent}{0in}
+
+% SIZEMARKER: Line spacing
+\renewcommand{\baselinestretch}{1.4}
+
+\newcommand{\DatestampY}[1]{#1}
+
+% Macro: body (rest of the document).
+% SIZEMARKER: Left vs. right columns
+\newenvironment{body}
+{\par\par
+\begin{longtable}{p{0.125\textwidth}p{0.84\textwidth}}}
+{\par\end{longtable}\par}
+
+% Macro: section (new section for Education, Research Experience, etc.).
+% SIZEMARKER: The separation here is between sections.
+\renewcommand{\section}[3]{\\[-0.7cm]\pdfbookmark[2]{#2}{#3}\\%
+\raggedleft  %align to the right
+{\fontsize{9.5pt}{9.5pt}\selectfont\bfseries\raggedright%
+\MakeUppercase{#1}}&}
+
+% SIZEMARKER: SmallEntryGap is a small vertical gap within a long entry
+\newcommand{\SmallEntryGap}{\par\vspace{0.38em}\par} 
+
+% Round image
 \usepackage{tikz}
-\usetikzlibrary{mindmap,shadows}
+
+\newcommand{\roundpic}[4][]{
+\tikz\node [circle, minimum width = #2,
+path picture = {
+\node [#1] at (path picture bounding box.center) {
+\includegraphics[width=#3]{#4}};
+}] {};}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PREAMBLE.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% CV Info (to be customized).
+\newcommand{\CVTitle}{Antonio Gámiz Delgado}
+\newcommand{\CVNote}{CV compiled on {\today}}
+
+% PDF settings and properties.
+\usepackage{hyperref}
 \hypersetup{
-    pdftitle={},
-    pdfauthor={},
-    pdfsubject={},
-    pdfkeywords={},
-    colorlinks=false,           % no lik border color
-    allbordercolors=white       % white border color for all
-}
-\smartdiagramset{
-    bubble center node font = \footnotesize,
-    bubble node font = \footnotesize,
-    % specifies the minimum size of the bubble center node
-    bubble center node size = 0.5cm,
-    %  specifies the minimum size of the bubbles
-    bubble node size = 0.5cm,
-    % specifies which is the distance among the bubble center node and the other bubbles
-    distance center/other bubbles = 0.3cm,
-    % sets the distance from the text to the border of the bubble center node
-    distance text center bubble = 0.5cm,
-    % set center bubble color
-    bubble center node color = pblue,
-    % define the list of colors usable in the diagram
-    set color list = {lightgray, materialcyan, orange, green, materialorange, materialteal, materialamber, materialindigo, materialgreen, materiallime},
-    % sets the opacity at which the bubbles are shown
-    bubble fill opacity = 0.6,
-    % sets the opacity at which the bubble text is shown
-    bubble text opacity = 0.5,
+pdftitle={\CVTitle},
+pdfauthor={Antonio Gámiz Delgado},
+pdfcreator={},
+pdfproducer={},
+pdfkeywords={},
+pdfpagemode={},
+bookmarks=true,
+unicode=true,
+bookmarksopen=true,
+pdfstartview=FitH,
+pdfpagelayout=OneColumn,
+pdfpagemode=UseOutlines,
+hidelinks,
+breaklinks,
+colorlinks=true,
+linkcolor=blue,
+citecolor=blue,
+filecolor=blue,
+urlcolor=blue
 }
 
-\addbibresource{bibliography.bib}
-\RequirePackage{xcolor}
-\definecolor{pblue}{HTML}{0395DE}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ACTUAL DOCUMENT.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
-\header{Antonio}{Gámiz}
-      {Computer Engineer}
-      
-% Fake text to add separator      
-\fcolorbox{white}{gray}{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{%
-.....
-}}
 
-% In the aside, each new line forces a line break
-\begin{aside}
-  \includegraphics[scale=0.18]{img/cara.png}
-  \section{Contact}
-    +34 639 250 244
-    antoniogamiz10@gmail.com
-    ~
-  \section{LinkedIn \& Git}
-    \href{www.linkedin.com/in/antonio-gamiz}{linkedin.com/in/antonio-gamiz}
-    \href{https://github.com/antoniogamiz}{github.com/antoniogamiz}
-    ~
-    ~
-    ~
-  % use  \hspace{} or \vspace{} to change bubble size, if needed
-  \section{Programming}
-    \smartdiagram[bubble diagram]{
-        \textbf{JS - NodeJS},
-        \textbf{C/C++},
-        \textbf{Python},
-        \textbf{Bash},
-        \textbf{Java}
-    }
-	~
-  \section{OS Preference}
-    \textbf{GNU/Linux}\includegraphics[scale=0.40]{img/5stars.png}
-    \textbf{Unix}\includegraphics[scale=0.40]{img/4stars.png}
-    \textbf{MacOS}\includegraphics[scale=0.40]{img/3stars.png}
-    \textbf{Windows}\includegraphics[scale=0.40]{img/3stars.png}
-    ~
-  \section{Languages}
-    \textbf{Spanish}\includegraphics[scale=0.40]{img/5stars.png}
-    \textbf{English}\includegraphics[scale=0.40]{img/4stars.png}
-    ~
-\end{aside}
-~
-\section{Experience}
-\begin{entrylist}
-  \entry
-    {10/19 - Now}
-    {Developer Student Club Member}
-    {University of Granada}
-    {Member of the Developer Student Club of my local university. \href{https://github.com/Developer-Student-Clubs-UGR}{(more information here)}.\\}
-  \entry
-    {05/19 - 09/19}
-    {Google of Summer of Code Program}
-    {Google}
-    {I successfully completed Google Summer of Code 2019, a program which connects students with mentors for 3 months to develop open source software. I did it with The Perl Foundation, \href{https://summerofcode.withgoogle.com/projects/4930522189398016}{(more information here)}.\\}
-  \entry    
-    {2016 - 2019}
-    {Organizer in Mathematical Student Association (MSA)}
-    {University of Granada}
-    {Local association where we made workshops about geometry, \LaTeX, analysis, etc.\\}
-\end{entrylist}
-\section{Education}
-~
-\begin{entrylist}
-  \entry
-    {2016 - Now}
-    {Bachelor's Degree in Computer Engineering}
-    {University of Granada}
-    {Currently in my forth year with a grade point average of $6,458$.\\}
-  \entry    
-    {2016 - Now}
-    {Bachelor's Degree in Mathematics}
-    {University of Granada}
-    {Currently in my forth year with a grade point average of $6,458$.\\}
-  \entry    
-    {2014 - 2016}
-    {B. Sc at IES Américo Castro, Huetor Tájar (Granada)}
-    {University of Granada}
-    {Successfully completed with a grade point average of $9,8$.\\}
-\end{entrylist}
-\section{Other Info}
-~
-I have a clear, logical mind with a practical approach to problem-solving and a drive to see things through to completion. I am eager to learn and contribute to Open Source community. I  really enjoy graphic design to visualize data and statistics.
 
-From time to time I also like to give some talks or conferences such as: \href{https://github.com/antoniogamiz/Curso-Python}{Python Course}, \href{https://github.com/antoniogamiz/discovering-perl6-talk}{Discovering Perl6} in \href{https://eslib.re/2019/}{esLibre} and \href{https://github.com/antoniogamiz/oauth-talk-jasyp-2019}{OAuth2.0} in \href{https://interferencias.tech/jasyp/}{JASYP19}.
+%%%%%%%%%%%%%%%
+% TITLE BLOCK %
+%%%%%%%%%%%%%%%
 
-\begin{flushleft}
-\emph{October 18th, 2019}
-\end{flushleft}
-\begin{flushright}
-\emph{Antonio Gámiz}
-\end{flushright}
+\begin{body}
+
+\raggedleft\roundpic{1.85cm}{1.85cm}{pic.jpg}
+&
+\vspace{-2.54cm} \par
+\huge{\textbf{Antonio Gámiz Delgado}} \par
+\large{\textbf{Math and Computer Science Student}} \par
+\normalsize{\href{https://antoniogamiz.dev}{antoniogamiz.dev} \textemdash\ Contact via \href{https://www.linkedin.com/in/antonio-gamiz}{linkedin.com/in/antonio-gamiz} or \href{mailto:antoniogamiz10@gmail.com}{antoniogamiz10@gmail.com}}
+% SIZEMARKER: Separation between header and content
+\vspace{0.1cm}
+
+%%%%%%%%%%%%%%%%
+%% EXPERIENCE %%
+%%%%%%%%%%%%%%%%
+
+
+
+\section{Industry}{Industry}{PDF:Industry}
+
+
+\textbf{Developer Student Club Member}. DSC, University of Granada \hfill \DatestampY{2019}--\DatestampY{2020} \newline
+\phantom{w} Tech community to publicize open source projects and solve local problems.
+
+\textbf{Software Intern}. Google Summer of Code \hfill \DatestampY{May 2019}--\DatestampY{August 2019} \newline
+\phantom{w}Developed a \href{https://github.com/Raku/Documentable}{tool} to generate the \href{https://docs.raku.org/}{doc page} of Raku Language.
+
+\textbf{Math Organiser}. Mathematical Student Association \hfill \DatestampY{2016}--\DatestampY{2019} \newline
+\phantom{w} Organised several \href{mathematical events}{https://sites.google.com/view/jornadasrsmeamat/iii-jornada-rsme-amat}{conferences} and workshops.
+
+
+\SmallEntryGap
+
+%\textbf{Engineering Manager II}. Google, Cloud Artificial Intelligence Solutions SRE\hfill \DatestampY{2020}--now\setlength{\dimen0}{\widthof{now}}\hspace{-\dimen0}\hphantom{\DatestampY{2000}} \newline
+%\phantom{w}Designed and led the development of a capacity management solution for 40+ products\newline
+%\phantom{w}Published a tech talk on \textit{\href{https://youtu.be/pOo0oKNM9I8}{the complexities of capacity management for distributed services}}
+%\SmallEntryGap
+
+%\textbf{Engineering Manager}. Google, Cloud Machine Learning SRE\hfill \DatestampY{2018}--\DatestampY{2020} \newline
+%\phantom{w}Grew the team from four to fifteen members, trained a manager and two technical leads\newline
+%\phantom{w}Improved the efficiency of artificial intelligence accelerators by 40\% across ten products\newline
+%\phantom{w}Partnered with NVIDIA to advertise \href{https://cloud.google.com/blog/products/ai-machine-learning/your-ml-workloads-cheaper-and-faster-with-the-latest-gpus}{lower-cost faster artificial intelligence accelerators}\newline
+%\phantom{w}Led reliability efforts across a large developer organization
+
+\section{Skills}{Skills}{PDF:Skills}
+
+I have basic experience in building webapps based on React.js and pure HTML+CSS+Javascript. I am more intestered in backend development where I have worked with Node.js, MySQL, Oracle and MongoDB. I also have a good understanding of Git, VSCode and Linux. I have made some minor projects in C++ and Python. From time to time, I like to write posts about what I do in \href{https://dev.to/antoniogamiz}{DEV.to}.
+
+%%%%%%%%%%%%%%%
+%% STUDIES %%
+%%%%%%%%%%%%%%%
+
+\section{Academia}{Academia}{PDF:Academia}
+
+\textbf{BSc Mathematics.} Current GPA 6.7/10. University of Granada\hfill \DatestampY{2016}--\DatestampY{now}\newline
+\textbf{BSc Computer Science.} Current GPA 6.7/10. University of Granada\hfill \DatestampY{2016}--\DatestampY{now}
+
+%%%%%%%%%%%%%%%
+%% INTERESTS %%
+%%%%%%%%%%%%%%%
+
+\section{Interests}{Interests}{PDF:Interests}
+Speaker at \href{https://github.com/antoniogamiz/discovering-perl6-talk}{esLibre} and \href{https://interferencias.tech/2019/04/20/jasyp-2019/}{Jasyp2019} \newline
+Blogger at \href{https://dev.to/antoniogamiz}{DEV.to}.
+
+\end{body}
 
 \end{document}
